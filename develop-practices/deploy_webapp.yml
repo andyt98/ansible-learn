@@ -1,9 +1,7 @@
-- name: Ensure Web App is deployed
+- name: Ensure the web application is deployed
   hosts: web_servers
   vars:
-    - webapp_version: v1.0
-
+    webapp_version: v1.0
+    webapp_message: "This is {{ inventory_hostname }}."
   roles:
     - role: webapp
-
-
