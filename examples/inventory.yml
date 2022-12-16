@@ -1,0 +1,12 @@
+all:
+  children:
+    lb_servers:
+      hosts:
+        proxy.example.com:
+    web_servers:
+      hosts:
+        web1.example.com:
+        web2.example.com:
+    backend_server_pool:
+      hosts:
+        appsrv-[a:e].example.com:
