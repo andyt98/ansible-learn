@@ -49,4 +49,12 @@
   - name: Abort the play if an error occurs - default behaivor
     ansible.builtin.debug:
       msg: "{{ lookup('file', 'my.file', errors='strict') }}"
+    tags: never
 
+  - name: Test fileglob lookup plugin
+    ansible.builtin.debug:
+      msg: "{{ lookup('fileglob', '~/.bash*') }}"
+
+  - name: Test fileglob lookup plugin
+    ansible.builtin.debug:
+      msg: "{{ query('fileglob', '~/.bash*') }}"
