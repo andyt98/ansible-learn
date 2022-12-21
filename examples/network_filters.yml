@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  gather_facts: false
+  name: Network filters examples
+  tasks:
+  - name: Filter example
+    vars:
+      listips:
+        - 192.168.2.1
+        - 10.0.0.128/25
+        - 172.24.10.0/255.255.255.0
+        - 172.24.10.0/255.255.255.255
+        - ff02::1
+        - ::1
+        - 2001::1/64
+        - 2001::/64
+        - www.redhat.com
+    ansible.builtin.debug:
+      msg:
+        - "{{ listips | ansible.utils.ipaddr }}"
+        - "{{ listips | ansible.utils.ipaddr('netmask') }}"
+        - "{{ listips | ansible.utils.ipaddr('host') }}"
+        - "{{ listips | ansible.utils.ipaddr('net') }}"
+        - "{{ listips | ansible.utils.ipaddr('private') }}"
+        - "{{ listips | ansible.utils.ipaddr('public') }}"
+        - "{{ listips | ansible.utils.ipaddr | ansible.utils.ipwrap }}"
+
+  - name: Manipulating IP Addresses
+    ansible.builtin.debug:
+      msg:
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('address') }}"
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('netmask') }}"
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('prefix') }}"
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('broadcast') }}"
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('network') }}"
+        - "{{ '192.0.2.1/24' | ansible.utils.ipaddr('revdns') }}"
+        - "{{ '192.0.2.0/24' | ansible.utils.ipaddr(5) }}"
+        - "{{ '192.0.2.0/24' | ansible.utils.ipaddr('range_usable') }}"
+        - "{{ '192.0.2.0/24' | ansible.utils.network_in_usable('192.0.2.5') }}"
+        - "{{ '192.0.2.5/24' | ansible.utils.ipaddr('next_usable') }}"
+
+  - name: Use cidr_merge filter to aggregate a list of subnets and individual hosts into the minimal representation.
+    vars:
+      mynetworks:
+        - 10.0.1.0/24
+        - 10.0.2.0/24
+        - 10.0.3.0/24
+        - 10.0.100.0/24
+        - 2001:db8::/64
+        - 2001:db8:0:1::/64
+    ansible.builtin.debug:
+      msg: "{{ mynetworks | ansible.utils.cidr_merge }}"
